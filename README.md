@@ -13,7 +13,7 @@ Windows + Docker Desktop에서 실행하는 ERPNext 사용자 정의 화면과 �
 1. 변경 전 `Manage-ERPNext.ps1 -Action Backup`으로 로컬 백업합니다.
 2. 사용자 정의 화면/스크립트를 내보내 `customizations/site.json`에 저장합니다.
 3. 변경 내용을 검증하고 CHANGELOG.md에 검증 결과와 대응 백업 폴더를 기록합니다.
-4. Git 커밋 후 GitHub에 푸시하고 주요 상태에 checkpoint 태그를 남깁니다.
+4. Git 커밋 후 GitHub에 푸시하고 주요 상태에 checkpoint 브랜치 또는 태그를 남깁니다.
 
 내보내기: `Get-Content -Raw scripts/export_customizations.py | docker exec -i erpnext-local-backend-1 /home/frappe/frappe-bench/env/bin/python -` (출력을 UTF-8로 customizations/site.json에 저장).
 

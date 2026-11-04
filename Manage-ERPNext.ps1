@@ -1,4 +1,4 @@
-param([ValidateSet('Start','Stop','Status','Backup')][string]$Action='Start')
+﻿param([ValidateSet('Start','Stop','Status','Backup')][string]$Action='Start')
 $ErrorActionPreference='Stop'
 
 # 어느 컴퓨터(어떤 윈도우 계정)에서든 Docker 경로를 자동으로 찾도록 처리
