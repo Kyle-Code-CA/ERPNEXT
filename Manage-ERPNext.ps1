@@ -44,20 +44,24 @@ function Ensure-DockerEngine {
   }
 }
 
+try {
 switch($Action){
  'Start' {
   Ensure-DockerEngine
   Run-Docker @('up','-d','--pull','never')
+  $ready=$false
   for($i=0;$i -lt 60;$i++){
    try {
      $r=Invoke-WebRequest 'http://localhost:8080/login?_lang=ko' -UseBasicParsing -TimeoutSec 5
      if($r.StatusCode -eq 200){
        Start-Process 'http://localhost:8080/desk/assets/equipment-management'
+       $ready=$true
        break
      }
    } catch {}
    Start-Sleep 2
   }
+  if(-not $ready){throw 'ERPNext 화면을 열 수 없습니다. 서버 응답 오류입니다. 설치 폴더의 last-error.log를 확인해 주세요.'}
  }
  'Stop' { Run-Docker @('stop') }
  'Status' { Run-Docker @('ps','-a') }
@@ -79,6 +83,9 @@ switch($Action){
   Copy-Item -LiteralPath "$root\.env" -Destination "$dest\deployment.env" -Force
  }
 }
-
-
-
+} catch {
+ $_ | Out-String | Add-Content -LiteralPath (Join-Path $root 'last-error.log')
+ Add-Type -AssemblyName PresentationFramework
+ [System.Windows.MessageBox]::Show($_.Exception.Message, 'ERPNext 실행 오류') | Out-Null
+ exit 1
+}
